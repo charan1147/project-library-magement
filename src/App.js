@@ -67,7 +67,7 @@ function App(){
         <Navigation isLoggedIn={isLoggedIn} userRole={userRole} handleLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/dashboard" element={isLoggedIn ? <Navigate to={userRole === 'admin' ? '/admin-dashboard' : '/user-dashboard'} /> : <Login handleLogin={handleLogin} />} />
+          <Route path="/dashboard" element={isLoggedIn ? <Navigate to={userRole === 'admin' ? '/admin-dashboard' : '/'} /> : <Login handleLogin={handleLogin} />} />
           <Route path="/admin-dashboard" element={isLoggedIn && userRole === 'admin' ? <ProtectedAdminDashboard /> : <Login handleLogin={handleLogin} />} />
           <Route path="/user-dashboard" element={isLoggedIn && userRole === 'user' ? <ProtectedUserDashboard /> : <Login handleLogin={handleLogin} />} />
           <Route path="/add-book" element={isLoggedIn && userRole === 'admin' ? <AddBook /> : <Login handleLogin={handleLogin} />} />
