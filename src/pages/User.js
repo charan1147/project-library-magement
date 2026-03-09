@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./User.css";
 
 function UserDashboard() {
-  const [userName, setUserName] = useState(""); 
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,7 +12,7 @@ function UserDashboard() {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        setError("No token found");
+        setError("No token found. Please log in.");
         setLoading(false);
         return;
       }
@@ -27,10 +27,14 @@ function UserDashboard() {
           },
         );
 
-      
-        setUserName(response.data.name || "User");
+        setUserName(response.data.name || response.data.username || "User");
+        setLoading(false); 
       } catch (err) {
-        setError("Failed to fetch user details. Please try again later.");
+        console.error("Fetch user error:", err); 
+        setError(
+          err.response?.data?.message ||
+            "Failed to fetch user details. Please try again.",
+        );
         setLoading(false);
       }
     };
@@ -39,17 +43,23 @@ function UserDashboard() {
   }, []);
 
   if (loading) {
-    return <div>Loading user information...</div>;
+    return <div className="loading">Loading user information...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   return (
     <div className="container">
       <h2 className="title">User Dashboard</h2>
-      {userName && <p>Welcome, {userName}!</p>} 
+
+      {userName ? (
+        <p className="welcome">Welcome, {userName}!</p>
+      ) : (
+        <p className="welcome">Welcome!</p>
+      )}
+
       <ul className="dashboard-list">
         <li className="dashboard-item">
           <Link to="/reserve-book">Reserve Book</Link>
